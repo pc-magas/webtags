@@ -61,20 +61,6 @@ if(!function_exists('getUrlData'))
           /*End of: "Get page's title" */
 
           $meta=getMetaTags($contents);
-
-          // $charset='';
-          //
-          // if(isset($meta['Content-Type']))
-          // {
-          //   $charset=str_replace('text/html; charset=','',$meta['Content-Type']);
-          // }
-          // else
-          // {
-          //   preg_match('/^<meta\s[^>]*charset=["\']([^>]+)["\'])/i', $contents, $matches);
-          //   var_dump($matches);
-          // }
-
-
           $result = array (
               'title' => $title,
               'metaTags' => $meta,
@@ -82,46 +68,6 @@ if(!function_exists('getUrlData'))
       }
 
       return $result;
-  }
-}
-
-if(!function_exists('getUrlContents'))
-{
-  /**
-  * Retrieves the content of a site of a specified $url
-  * @author php.net
-  *
-  * @return {Boolean} FALSE on failure
-  *         {String} with the contents
-  */
-  function getUrlContents($url, $maximumRedirections = null, $currentRedirection = 0)
-  {
-    $result = false;
-
-    $contents = @file_get_contents($url);
-
-    // Check if we need to go somewhere else
-
-    if (isset($contents) && is_string($contents))
-    {
-        preg_match_all('/<[\s]*meta[\s]*http-equiv="?REFRESH"?' . '[\s]*content="?[0-9]*;[\s]*URL[\s]*=[\s]*([^>"]*)"?' . '[\s]*[\/]?[\s]*>/si', $contents, $match);
-
-        if (isset($match) && is_array($match) && count($match) == 2 && count($match[1]) == 1)
-        {
-            if (!isset($maximumRedirections) || $currentRedirection < $maximumRedirections)
-            {
-                return getUrlContents($match[1][0], $maximumRedirections, ++$currentRedirection);
-            }
-
-            $result = false;
-        }
-        else
-        {
-            $result = $contents;
-        }
-    }
-
-    return $contents;
   }
 }
 
@@ -143,11 +89,10 @@ if(!function_exists('getCurlContents'))
 
     $header=$res->getHeader('content-type');
     $charset=str_replace('text/html; charset=','',$header);
-
-    $data=$res->getBody();
-
+    var_dump($charset);
+    $data=$res->getBody()->getContents();
     if(strcasecmp($charset[0],'utf-8')!==0) $data=mb_convert_encoding($data,'UTF-8',$charset);
-    //echo $data;
+
     return $data;
   }
 }
