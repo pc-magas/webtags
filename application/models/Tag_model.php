@@ -17,7 +17,8 @@ class Tag_model extends CI_Model
   {
     $this->load->helper('http_meta_helper');
     $meta_tags=getUrlData($url);
-    // var_dump($meta_tags);
+
+    var_dump($meta_tags);
 
     $final_tags=array();
 

@@ -50,6 +50,7 @@ if(!function_exists('getUrlData'))
       {
           $title = null;
           $metaTags = null;
+          $h1=null;
 
           /*Get page's title*/
           preg_match('/<title>([^>]*)<\/title>/si', $contents, $match );
@@ -60,10 +61,18 @@ if(!function_exists('getUrlData'))
           }
           /*End of: "Get page's title" */
 
-          $meta=getMetaTags($contents);
+          $metaTags=getMetaTags($contents);
+
+          preg_match_all('/<h[1-6]>([^>]*)<\/h[1-6]>/si', $contents, $match );
+
+          if (isset($match) && is_array($match) && count($match) > 0)
+          {
+              $h1 = $match[0];
+          }
           $result = array (
               'title' => $title,
-              'metaTags' => $meta,
+              'metaTags' => $metaTags,
+              'html_header'=>$h1
           );
       }
 
@@ -88,10 +97,10 @@ if(!function_exists('getCurlContents'))
     $res = $client->request('GET', $url);
 
     $header=$res->getHeader('content-type');
-    $charset=str_replace('text/html; charset=','',$header);
-    var_dump($header);
+    $charset=str_replace('text/html; charset=','',$header[0]);
+
     $data=$res->getBody()->getContents();
-    if(strcasecmp($charset[0],'utf-8')!==0) $data=mb_convert_encoding($data,'UTF-8',$charset);
+    if($charset!==$header[0] && strcasecmp($charset[0],'utf-8')!==0) $data=mb_convert_encoding($data,'UTF-8',$charset);
 
     return $data;
   }
