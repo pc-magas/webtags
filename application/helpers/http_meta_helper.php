@@ -89,7 +89,7 @@ if(!function_exists('getCurlContents'))
 
     $header=$res->getHeader('content-type');
     $charset=str_replace('text/html; charset=','',$header);
-    var_dump($charset);
+    var_dump($header);
     $data=$res->getBody()->getContents();
     if(strcasecmp($charset[0],'utf-8')!==0) $data=mb_convert_encoding($data,'UTF-8',$charset);
 
