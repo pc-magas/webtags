@@ -15,8 +15,9 @@ class Tag_model extends CI_Model
   */
   function generate_tags($url)
   {
-    $meta_tags=get_meta_tags($url);
-    var_dump($meta_tags);
+    $this->load->helper('http_meta_helper');
+    $meta_tags=getUrlData($url);
+    // var_dump($meta_tags);
 
     $final_tags=array();
 
