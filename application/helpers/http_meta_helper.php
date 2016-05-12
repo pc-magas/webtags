@@ -3,7 +3,7 @@
 if(!function_exists('getMetaTags'))
 {
   /**
-  * Retrieves anything that is on <meta /> tag
+  * @return {String} With attributes that are on <meta /> Tag
   */
   function getMetaTags($str)
   {
@@ -34,13 +34,12 @@ if(!function_exists('getMetaTags'))
 if(!function_exists('getUrlData'))
 {
   /**
-  * Retrieve the title and the <meta /> tags of a site in $url
+  * Retrieve the title, the headers and the attributed of the <meta /> tags of a site in $url
   * @param $url {String} The site's $url
-  * @param $row {Boolean} For non escpared html characters
   * @return {Boolean} FALSE on failure
-  *         {Array} With the title anD <meta /> tags of a site
+  *         {Array} With the title, the headers and the attributes of the <meta /> tags of a site
   */
-  function getUrlData($url, $raw=false) // $raw - enable for raw display
+  function getUrlData($url)
   {
       $result = false;
 
@@ -63,6 +62,7 @@ if(!function_exists('getUrlData'))
 
           $metaTags=getMetaTags($contents);
 
+
           preg_match_all('/<h[1-6]>([^>]*)<\/h[1-6]>/si', $contents, $match );
 
           if (isset($match) && is_array($match) && count($match) > 0)
@@ -84,24 +84,36 @@ if(!function_exists('getCurlContents'))
 {
   /**
   * Retrieves the content of a site of a specified $url
-  * @author php.net
   *
   * @return {Boolean} FALSE on failure
   *         {String} with the contents
   */
-  function getCurlContents($url, $maximumRedirections = null, $currentRedirection = 0)
+  function getCurlContents($url)
   {
     require APPPATH."../vendor/autoload.php";
 
-    $client = new GuzzleHttp\Client();
-    $res = $client->request('GET', $url);
+    try
+    {
+      $client = new GuzzleHttp\Client();
+      $res = $client->request('GET', $url);
 
-    $header=$res->getHeader('content-type');
-    $charset=str_replace('text/html; charset=','',$header[0]);
+      if((int)$res->getStatusCode()>=400) return false; //If something wrong happened like 4XX or 5XX errors return false
 
-    $data=$res->getBody()->getContents();
-    if($charset!==$header[0] && strcasecmp($charset[0],'utf-8')!==0) $data=mb_convert_encoding($data,'UTF-8',$charset);
+      /*For better prosessing we retrieve the connection's encoding*/
+      $header=$res->getHeader('content-type');
+      $charset=str_replace('text/html; charset=','',$header[0]);
+      /*End of: "For better prosessing we retrieve the connection's encoding" */
 
-    return $data;
+      $data=$res->getBody()->getContents();
+
+      //Convert to UTF-8
+      if($charset!==$header[0] && strcasecmp($charset[0],'utf-8')!==0) $data=mb_convert_encoding($data,'UTF-8',$charset);
+
+      return $data;
+    }
+    catch (Exception $e)
+    {
+        return false;
+    }
   }
 }
