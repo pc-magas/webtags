@@ -21,8 +21,15 @@ class Tag_model extends CI_Model
     $this->load->helper('http_meta_helper');
     $meta_tags=getUrlData($url);
     if($meta_tags===false) return false;
-
     $final_tags=array();
+
+    foreach($meta_tags['metaTags'] as $key=>$meta)
+    {
+      if($key==='keywords')
+      {
+        $final_tags=array_merge($final_tags,explode(',',$meta));
+      }
+    }
 
     return $final_tags;
   }
