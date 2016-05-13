@@ -19,19 +19,44 @@ class Tag_model extends CI_Model
   function generate_tags($url)
   {
     $this->load->helper('http_meta_helper');
-    $meta_tags=getUrlData($url);
-    if($meta_tags===false) return false;
-    $final_tags=array();
+    $meta_tags=getUrlData($url);//It stores any sort of element that we can export information
 
-    foreach($meta_tags['metaTags'] as $key=>$meta)
+    if($meta_tags===false) return false;
+    if(isset($meta_tags['metaTags']['keywords'])) return explode(',',$meta_tags['metaTags']['keywords']);
+
+    $final_tags=array(); //Array that stores the final hashtags
+    $final_string="";//String that will sum all the to be hashhtag words
+
+    try
     {
-      if($key==='keywords')
+      /*Try to retrieve from headers the most common words*/
+      foreach($meta_tags['html_header'] as $h)
       {
-        $final_tags=array_merge($final_tags,explode(',',$meta));
+        $final_string.=$h;
+      }
+      /*End of: "Try to retrieve from headers the most common words"*/
+      $this->load->library('wordlist');
+      $final_string=$this->wordlist->remove_strings($final_string);
+
+      $this->load->helper('phrase');
+
+      $final_string=common_strings($final_string);
+
+      $i=1;
+      foreach($final_string as $key=>$val)
+      {
+        if($i>10) break;
+        if(strlen($key)===1) continue;
+        $final_tags[]=$key;
+        $i++;
       }
     }
+    catch (Exception $e)
+    {
+      if(empty($final_string)) return false;
+    }
 
-    return $final_tags;
+    return  array_unique($final_tags);// In order not to have duplicates
   }
 
 }
