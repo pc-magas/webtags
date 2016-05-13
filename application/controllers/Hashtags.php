@@ -9,6 +9,13 @@ class Hashtags extends CI_Controller
     $this->load->model("Tag_model","hashtag");
   }
 
+  /**
+  * Main Page
+  */
+  public function index()
+  {
+    $this->load->view('index_view.php');
+  }
 
   /**
   *Auto generate Hashtags

@@ -91,7 +91,6 @@ if(!function_exists('getCurlContents'))
   function getCurlContents($url)
   {
     require APPPATH."../vendor/autoload.php";
-
     try
     {
       $client = new GuzzleHttp\Client();
