@@ -63,7 +63,7 @@ if(!function_exists('getUrlData'))
           $metaTags=getMetaTags($contents);
 
 
-          preg_match_all('/<h[1-6]>([^>]*)<\/h[1-6]>/si', $contents, $match );
+          preg_match_all('/<h[1-6]>(.*)<\/h[1-6]>/si', $contents, $match );
 
           if (isset($match) && is_array($match) && count($match) > 0)
           {
