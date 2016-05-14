@@ -29,29 +29,45 @@ class Tag_model extends CI_Model
 
     try
     {
-      /*Try to retrieve from headers the most common words*/
+      $this->load->library('wordlist');
+      $this->load->helper('phrase');
+
+      $string=false;//General purpose string variable
       if(!empty($meta_tags['html_header']))//Generate from headers (hX html tags)
       {
+        /*Try to retrieve from headers the most common words*/
         foreach($meta_tags['html_header'] as $h)
         {
           $final_string.=$h;
         }
-        $this->load->library('wordlist');
         $final_string=$this->wordlist->remove_strings($final_string);
-
-        $this->load->helper('phrase');
         $final_string=common_strings($final_string);
 
         $i=1;
         foreach($final_string as $key=>$val)
         {
           if($i>10) break;
-          if(strlen($key)===1) continue;
+          if(strlen($key)<=2) continue;
           $final_tags[]=$key;
           $i++;
         }
+        /*End of: "Try to retrieve from headers the most common words"*/
+
       }
-      /*End of: "Try to retrieve from headers the most common words"*/
+      else if(!empty($meta_tags['metaTags']['description']))//If no content found try from the description
+      {
+        $string=$meta_tags['metaTags']['description'];
+      }
+      else//Try from the title
+      {
+        $string=$meta_tags['title'];
+      }
+
+      if($string)
+      {
+        $string=explode(' ',$this->wordlist->remove_strings($string));
+        $final_tags=$string;
+      }
     }
     catch (Exception $e)
     {

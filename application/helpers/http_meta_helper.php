@@ -91,12 +91,18 @@ if(!function_exists('pseudoMatchHTags'))
   {
     $parts      = preg_split("%<\/h[1-6]>%si", $htmlContentWithHTags);
     $matches    = array();
-     foreach($parts as $part)
-     {
-        if(preg_match("%(.*|.?)(<h)([1-6])%si", $part))
-        {
-          $matches[] = preg_replace("%(.*|.?)(<)(h[1-6])(.*)%si", "$2$3$4$2/$3>", $part);
-        }
+
+    if(!empty($parts))
+    {
+       foreach($parts as $part)
+       {
+         if(empty($part)) continue;//Do not do any time consuming proce4ss when no data exist
+         set_time_limit(50);
+          if(preg_match("%(.*|.?)(<h)([1-6])%si", $part))
+          {
+            $matches[] = preg_replace("%(.*|.?)(<)(h[1-6])(.*)%si", "$2$3$4$2/$3>", $part);
+          }
+       }
      }
      return $matches;
   }
@@ -129,6 +135,8 @@ if(!function_exists('getCurlContents'))
 
       //Convert to UTF-8
       if($charset!==$header[0] && strcasecmp($charset[0],'utf-8')!==0) $data=mb_convert_encoding($data,'UTF-8',$charset);
+
+      $data=preg_replace("/<script(\s*([\w]*=\"(\w\d)*\"))*>.<\/script>/",'',$data);
 
       return $data;
     }
