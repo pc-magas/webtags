@@ -20,7 +20,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <h1>Generated Tags</h1>
 
 <?php
-  if(is_array($tags))
+  if(!empty($tags))
   {
 ?>
     <div class="col-xs-12">
@@ -30,7 +30,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       echo "<span class=\"label label-default\">#$t</span>&nbsp;";
     }
 ?>
-  </div>  
+  </div>
 <?php
   }
   else
