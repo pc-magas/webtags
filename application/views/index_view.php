@@ -14,7 +14,7 @@ $this->load->helper('url');
 <body>
   <div class="container-fluid">
     <h1>Generate hastag from a webpage</h1>
-      <form class="form-inline" action="<?php echo base_url("index.php/Hashtags/generate_tags")?>" method="POST">
+      <form class="form-inline" action="<?php echo site_url("index.php/Hashtags/generate_tags")?>" method="POST">
         <div class="form-group">
            <input type="text" class="form-control" name="url" placeholder="Enter the site url here" required>
          </div>
