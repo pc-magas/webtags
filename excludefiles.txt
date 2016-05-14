@@ -1,0 +1,8 @@
+licence.txt
+contributing.md
+composer.json
+composer.lock
+contributing.md
+.gitignore
+.*
+excludefiles.txt
