@@ -29,11 +29,19 @@ class Tag_model extends CI_Model
 
     try
     {
-      /*Try to retrieve from headers the most common words*/
-      foreach($meta_tags['html_header'] as $h)
+      if(!empty($meta_tags['html_header']))
       {
-        $final_string.=$h;
+        /*Try to retrieve from headers the most common words*/
+        foreach($meta_tags['html_header'] as $h)
+        {
+          $final_string.=$h;
+        }
       }
+      //
+      // if(!empty($meta_tags['title']))
+      // {
+      //
+      // }
       /*End of: "Try to retrieve from headers the most common words"*/
       $this->load->library('wordlist');
       $final_string=$this->wordlist->remove_strings($final_string);
