@@ -16,14 +16,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 </head>
 <body>
+  <div class="container-fluid">
   <h1>Generated Tags</h1>
+
 <?php
   if(is_array($tags))
   {
+?>
+    <div class="col-xs-12">
+<?php
     foreach($tags as $t)
     {
       echo "<span class=\"label label-default\">#$t</span>&nbsp;";
     }
+?>
+  </div>  
+<?php
   }
   else
   {
@@ -35,5 +43,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <?php
   }
 ?>
+</div>
 </body>
 </html>
