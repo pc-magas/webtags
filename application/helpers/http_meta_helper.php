@@ -52,7 +52,8 @@ if(!function_exists('getUrlData'))
           $h1=null;
 
           /*Get page's title*/
-          preg_match('/<title>([^>]*)<\/title>/si', $contents, $match );
+          //preg_match('/<title>([^>]*)<\/title>/si', $contents, $match );
+          $match=pseudoMatchHTags($contents);
 
           if (isset($match) && is_array($match) && count($match) > 0)
           {
@@ -63,12 +64,17 @@ if(!function_exists('getUrlData'))
           $metaTags=getMetaTags($contents);
 
 
-          preg_match_all('/<h[1-6]>([^>]*)<\/h[1-6]>/si', $contents, $match );
+          preg_match_all('<h\d>', $contents, $matches);
 
           if (isset($match) && is_array($match) && count($match) > 0)
           {
-              $h1 = $match[0];
+              foreach($match as $key=>$m)
+              {
+                $match[$key]= html_entity_decode(strip_tags($m));
+              }
+              $h1=$match;
           }
+
           $result = array (
               'title' => $title,
               'metaTags' => $metaTags,
@@ -77,6 +83,26 @@ if(!function_exists('getUrlData'))
       }
 
       return $result;
+  }
+}
+
+if(!function_exists('pseudoMatchHTags'))
+{
+  /**
+  * Get the headers of a web page
+  * @param  $htmlContentWithHTags {String} Get the html contents of a web page
+  * @return Array with the matches
+  */
+  function pseudoMatchHTags($htmlContentWithHTags)
+  {
+      $parts      = preg_split("%<\/h[1-6]>%si", $htmlContentWithHTags);
+      $matches    = array();
+      foreach($parts as $part){
+          if(preg_match("%(.*|.?)(<h)([1-6])%si", $part)){
+              $matches[] = preg_replace("%(.*|.?)(<)(h[1-6])(.*)%si", "$2$3$4$2/$3>", $part);
+          }
+      }
+      return $matches;
   }
 }
 

@@ -15,9 +15,21 @@
 <body>
   <h1>Generated Tags</h1>
 <?php
-  foreach($tags as $t)
+  if(is_array($tags))
   {
-    echo "<span class=\"label label-default\">#$t</span>&nbsp;";
+    foreach($tags as $t)
+    {
+      echo "<span class=\"label label-default\">#$t</span>&nbsp;";
+    }
+  }
+  else
+  {
+?>
+    <div class="alert alert-danger" role="alert">
+        <strong>Sorry:</strong>
+        I couldn't generate hashtags
+    </div>
+<?php
   }
 ?>
 </body>
