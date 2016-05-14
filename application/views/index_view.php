@@ -13,11 +13,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <body>
   <div class="container-fluid">
     <h1>Generate hastag from a webpage</h1>
-      <?php
-        $this->load->helper('form');
-        echo form_open("/Hashtags/generate_tags",array)
-      ?>
-      <form class="form-inline" action="<?php echo "http://$_SERVER[HTTP_HOST]/index.php/Hashtags/generate_tags"?> method="POST">
+      <form class="form-inline" action="<?php echo "http://$_SERVER[HTTP_HOST]/index.php/Hashtags/generate_tags";?>" method="POST">
         <div class="form-group">
            <input type="text" class="form-control" name="url" placeholder="Enter the site url here" required>
          </div>
