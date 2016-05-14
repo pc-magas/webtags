@@ -61,9 +61,9 @@ if(!function_exists('getUrlData'))
           }
           /*End of: "Get page's title" */
 
-          $metaTags=getMetaTags($contents);
+          $metaTags=getMetaTags($contents);//Use meta tags
 
-          preg_match_all('<h\d>', $contents, $matches);
+          $match=pseudoMatchHTags($contents);
 
           if (isset($match) && is_array($match) && count($match) > 0)
           {
@@ -82,6 +82,23 @@ if(!function_exists('getUrlData'))
       }
 
       return $result;
+  }
+}
+
+if(!function_exists('pseudoMatchHTags'))
+{
+  function pseudoMatchHTags($htmlContentWithHTags)
+  {
+    $parts      = preg_split("%<\/h[1-6]>%si", $htmlContentWithHTags);
+    $matches    = array();
+     foreach($parts as $part)
+     {
+        if(preg_match("%(.*|.?)(<h)([1-6])%si", $part))
+        {
+          $matches[] = preg_replace("%(.*|.?)(<)(h[1-6])(.*)%si", "$2$3$4$2/$3>", $part);
+        }
+     }
+     return $matches;
   }
 }
 

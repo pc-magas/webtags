@@ -17,7 +17,11 @@ class Wordlist
     /*Read line by line*/
     $file=fopen($file,'rt');
     if(!$file) throw Exception("Could not read file");
-    while (($line = fgets($handle)) !== false) $this->wordlist[]=$line;//Appending to the wordlis
+    while (($line = fgets($handle)) !== false)
+    {
+        var_dump($line);
+        $this->wordlist[]=(strlen($line)==1)?$line:" ".$line." ";//Appending to the wordlis
+    }
     fclose($file);
     /*End of: "Read line by line"*/
   }
@@ -30,7 +34,7 @@ class Wordlist
   public function remove_strings($string)
   {
     if(!is_string($string)) throw Exception("The input you've givven is not a string.");
-    return str_replace($this->wordlist,"",$string);
+    return str_replace($this->wordlist," ",mb_strtolower($string));
   }
 }
 ?>
