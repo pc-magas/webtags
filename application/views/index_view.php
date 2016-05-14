@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-$this->load->helper('url');
 ?>
 <!DOCTYPE html>
 <html>
@@ -14,7 +13,10 @@ $this->load->helper('url');
 <body>
   <div class="container-fluid">
     <h1>Generate hastag from a webpage</h1>
-      <form class="form-inline" action="<?php echo site_url("index.php/Hashtags/generate_tags")?>" method="POST">
+      <?php
+        $this->load->helper('form');
+        echo form_open("/Hashtags/generate_tags",array('class'=>'form-inline'));
+      ?>
         <div class="form-group">
            <input type="text" class="form-control" name="url" placeholder="Enter the site url here" required>
          </div>
