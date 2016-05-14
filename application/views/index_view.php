@@ -15,6 +15,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <h1>Generate hastag from a webpage</h1>
       <?php
         $this->load->helper('form');
+        echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         echo form_open("/Hashtags/generate_tags",array('class'=>'form-inline'));
       ?>
         <div class="form-group">
