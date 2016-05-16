@@ -63,16 +63,16 @@ if(!function_exists('getUrlData'))
 
           $metaTags=getMetaTags($contents);//Use meta tags
 
-          $match=pseudoMatchHTags($contents);
-
-          if (isset($match) && is_array($match) && count($match) > 0)
-          {
-              foreach($match as $key=>$m)
-              {
-                $match[$key]= html_entity_decode(strip_tags($m));
-              }
-              $h1=$match;
-          }
+          // $match=pseudoMatchHTags($contents);
+          //
+          // if (isset($match) && is_array($match) && count($match) > 0)
+          // {
+          //     foreach($match as $key=>$m)
+          //     {
+          //       $match[$key]= html_entity_decode(strip_tags($m));
+          //     }
+          //     $h1=$match;
+          // }
 
           $result = array (
               'title' => $title,
